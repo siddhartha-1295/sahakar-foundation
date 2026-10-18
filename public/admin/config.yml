@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: YOUR-GITHUB-USERNAME/sahakar-foundation   # change this
+  repo: siddhartha-1295/sahakar-foundation   # change this
   branch: main
   base_url: https://api.netlify.com               # lets Netlify handle GitHub login
   auth_endpoint: auth
