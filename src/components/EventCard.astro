@@ -1,0 +1,19 @@
+---
+import { pick, pillarName, formatDate, istDay, ui, type Lang } from '../i18n';
+const { lang, entry, past = false } = Astro.props as { lang: Lang; entry: any; past?: boolean };
+const d = entry.data;
+const loc = lang === 'te' ? 'te-IN' : 'en-IN';
+const day = new Intl.DateTimeFormat(loc, { day: 'numeric', timeZone: 'Asia/Kolkata' }).format(d.date);
+const mon = new Intl.DateTimeFormat(loc, { month: 'short', timeZone: 'Asia/Kolkata' }).format(d.date);
+const t = ui[lang];
+---
+<article class={'card event' + (past ? ' is-past' : '')} data-date={istDay(d.date)}>
+  <div class="date-badge"><strong>{day}</strong><span>{mon}</span></div>
+  <div>
+    <h3>{pick(lang, d.title, d.title_te)}</h3>
+    <p class="muted small">{formatDate(lang, d.date)}{d.time ? ` · ${d.time}` : ''}{d.location ? ` · ${d.location}` : ''}</p>
+    {d.pillar && <span class="tag green">{pillarName(lang, d.pillar)}</span>}
+    {(d.description || d.description_te) && <p>{pick(lang, d.description ?? '', d.description_te)}</p>}
+    {!past && d.register_link && <a class="btn btn-primary btn-sm" href={d.register_link} target="_blank" rel="noopener">{t.register}</a>}
+  </div>
+</article>

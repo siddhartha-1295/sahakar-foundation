@@ -1,0 +1,37 @@
+---
+import Base from '../layouts/Base.astro';
+import EventCard from '../components/EventCard.astro';
+import { ui, type Lang } from '../i18n';
+import { splitEvents } from '../lib/content';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const { upcoming, past } = await splitEvents();
+---
+<Base lang={lang} title={t.nav.events}>
+  <div class="page-head"><div class="container"><h1>{t.nav.events}</h1><p>{t.eventsIntro}</p></div></div>
+  <section class="section">
+    <div class="container">
+      <h2>{t.upcoming}</h2>
+      <div class="grid g2" id="upcoming-list" data-list>{upcoming.map((e) => <EventCard lang={lang} entry={e} />)}</div>
+      <p class="muted" id="upcoming-empty" hidden>{t.noUpcoming}</p>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container">
+      <h2>{t.past}</h2>
+      <div class="grid g2" id="past-list" data-list>{past.map((e) => <EventCard lang={lang} entry={e} past />)}</div>
+      <p class="muted" id="past-empty" hidden>{t.noPast}</p>
+    </div>
+  </section>
+  <script>
+    // Events that passed since the last build move to "Past" in the visitor's browser (India time).
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date());
+    const up = document.getElementById('upcoming-list')!;
+    const pastList = document.getElementById('past-list')!;
+    Array.from(up.querySelectorAll<HTMLElement>('[data-date]')).forEach((el) => {
+      if ((el.dataset.date as string) < today) { el.classList.add('is-past'); pastList.prepend(el); }
+    });
+    (document.getElementById('upcoming-empty') as HTMLElement).hidden = up.children.length > 0;
+    (document.getElementById('past-empty') as HTMLElement).hidden = pastList.children.length > 0;
+  </script>
+</Base>

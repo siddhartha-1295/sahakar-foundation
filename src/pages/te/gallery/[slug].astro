@@ -1,0 +1,9 @@
+---
+import View from '../../../views/AlbumDetail.astro';
+import { getAlbums } from '../../../lib/content';
+export async function getStaticPaths() {
+  return (await getAlbums()).map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+---
+<View lang="te" entry={entry} />

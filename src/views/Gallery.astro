@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import { ui, href, pick, formatDate, type Lang } from '../i18n';
+import { getAlbums, getAllPhotos } from '../lib/content';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const albums = await getAlbums();
+const photos = await getAllPhotos();
+---
+<Base lang={lang} title={t.nav.gallery}>
+  <div class="page-head"><div class="container"><h1>{t.nav.gallery}</h1><p>{t.galleryIntro}</p></div></div>
+  <section class="section">
+    <div class="container">
+      <h2>{t.albumsT}</h2>
+      <div class="grid g3">
+        {albums.map((a) => (
+          <article class="card album-card">
+            <a class="card-img" href={href(lang, `/gallery/${a.id}`)}>
+              <img src={a.data.cover || a.data.photos[0]} alt="" loading="lazy" />
+              <span class="count">{a.data.photos.length} {t.photoCount}</span>
+            </a>
+            <div class="card-body">
+              <h3><a href={href(lang, `/gallery/${a.id}`)}>{pick(lang, a.data.title, a.data.title_te)}</a></h3>
+              <p class="muted small" style="margin:0">{formatDate(lang, a.data.date)}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container">
+      <h2>{t.allPhotos}</h2>
+      {photos.length ? <PhotoGrid photos={photos} group="all" /> : <p class="muted">{t.empty}</p>}
+    </div>
+  </section>
+</Base>

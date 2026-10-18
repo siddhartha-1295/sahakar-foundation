@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import UpdateCard from '../components/UpdateCard.astro';
+import { ui, pillars, type Lang } from '../i18n';
+import { getUpdates } from '../lib/content';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const all = await getUpdates();
+---
+<Base lang={lang} title={t.nav.updates}>
+  <div class="page-head"><div class="container"><h1>{t.nav.updates}</h1><p>{t.updatesIntro}</p></div></div>
+  <section class="section">
+    <div class="container">
+      <div class="filters" id="filters">
+        <button class="chip active" data-filter="all">{t.all}</button>
+        {pillars.map((p) => <button class="chip" data-filter={p.key}>{p.icon} {p[lang]}</button>)}
+      </div>
+      <div class="grid g3" id="grid">{all.map((e) => <UpdateCard lang={lang} entry={e} />)}</div>
+      <p class="muted" id="none" hidden>{t.empty}</p>
+    </div>
+  </section>
+  <script>
+    const chips = Array.from(document.querySelectorAll<HTMLElement>('[data-filter]'));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('#grid [data-pillar]'));
+    const none = document.getElementById('none')!;
+    function apply(key: string) {
+      let n = 0;
+      chips.forEach((c) => c.classList.toggle('active', c.dataset.filter === key));
+      cards.forEach((c) => { const show = key === 'all' || c.dataset.pillar === key; c.hidden = !show; if (show) n++; });
+      none.hidden = n > 0;
+    }
+    const valid = chips.map((c) => c.dataset.filter);
+    const initial = new URLSearchParams(location.search).get('pillar') || 'all';
+    apply(valid.includes(initial) ? initial : 'all');
+    chips.forEach((c) => c.addEventListener('click', () => {
+      const k = c.dataset.filter!;
+      apply(k);
+      history.replaceState(null, '', k === 'all' ? location.pathname : `?pillar=${k}`);
+    }));
+  </script>
+</Base>

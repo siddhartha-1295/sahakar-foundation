@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import UpdateCard from '../components/UpdateCard.astro';
+import EventCard from '../components/EventCard.astro';
+import { ui, pillars, href, pick, type Lang } from '../i18n';
+import { getUpdates, splitEvents } from '../lib/content';
+import settings from '../data/settings.json';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const latest = (await getUpdates()).slice(0, 3);
+const next = (await splitEvents()).upcoming.slice(0, 3);
+---
+<Base lang={lang} description={pick(lang, settings.hero_text, settings.hero_text_te)}>
+  <section class="hero">
+    <div class="container">
+      <p class="tagline">{pick(lang, settings.tagline, settings.tagline_te)}</p>
+      <h1>{pick(lang, settings.hero_title, settings.hero_title_te)}</h1>
+      <p>{pick(lang, settings.hero_text, settings.hero_text_te)}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href={href(lang, '/get-involved')}>{t.volunteer}</a>
+        <a class="btn btn-light" href={href(lang, '/work')}>{t.ctaWork}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="center">{t.areas}</h2>
+      <p class="muted center">{t.areasIntro}</p>
+      <div class="grid g3" style="margin-top:1.4rem">
+        {pillars.map((p) => (
+          <a class="card area-card" href={href(lang, `/work#${p.key}`)}>
+            <div class="icon">{p.icon}</div>
+            <h3>{p[lang]}</h3>
+            <p class="muted" style="margin:0">{lang === 'te' ? p.desc_te : p.desc_en}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="impact">
+    <div class="container">
+      <div class="grid g4">
+        {settings.impact.map((i) => <div><strong>{i.value}</strong>{pick(lang, i.label, i.label_te)}</div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>{t.latest}</h2>
+      <div class="grid g3">{latest.map((e) => <UpdateCard lang={lang} entry={e} />)}</div>
+      <p><a class="btn btn-outline" href={href(lang, '/updates')}>{t.viewAll}</a></p>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <h2>{t.nextEvents}</h2>
+      {next.length ? <div class="grid g3">{next.map((e) => <EventCard lang={lang} entry={e} />)}</div> : <p class="muted">{t.noUpcoming}</p>}
+      <p><a class="btn btn-outline" href={href(lang, '/events')}>{t.viewAll}</a></p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid g2">
+      <div class="banner vol"><h2>{t.volBannerT}</h2><p>{t.volBannerP}</p><a class="btn btn-light" href={href(lang, '/get-involved')}>{t.volunteer}</a></div>
+      <div class="banner don"><h2>{t.donBannerT}</h2><p>{t.donBannerP}</p><a class="btn btn-light" href={href(lang, '/donate')}>❤ {t.donate}</a></div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,30 @@
+---
+import { marked } from 'marked';
+import Base from '../layouts/Base.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import { ui, href, pick, pillarName, formatDate, youtubeId, type Lang } from '../i18n';
+const { lang, entry } = Astro.props as { lang: Lang; entry: any };
+const t = ui[lang];
+const d = entry.data;
+const title = pick(lang, d.title, d.title_te);
+const summary = pick(lang, d.summary, d.summary_te);
+const bodyMd = lang === 'te' && d.body_te ? d.body_te : entry.body ?? '';
+const html = marked.parse(bodyMd, { async: false }) as string;
+const yt = youtubeId(d.youtube);
+---
+<Base lang={lang} title={title} description={summary} image={d.cover}>
+  <article class="section">
+    <div class="container">
+      <p><a href={href(lang, '/updates')}>{t.back}</a></p>
+      <span class="tag">{pillarName(lang, d.pillar)}</span>
+      <h1 style="margin-top:.6rem">{title}</h1>
+      <p class="muted">{formatDate(lang, d.date)}{d.location ? ` · ${t.place}: ${d.location}` : ''}</p>
+      <p class="lead">{summary}</p>
+      {d.cover && <img class="cover" src={d.cover} alt={title} />}
+      {yt && <div class="video"><iframe src={`https://www.youtube-nocookie.com/embed/${yt}`} title={title} loading="lazy" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>}
+      <div class="prose" set:html={html} />
+      {d.photos.length > 0 && (<><h2 style="margin-top:2rem">{t.photosT}</h2><PhotoGrid photos={d.photos} group={'u-' + entry.id} alt={title} /></>)}
+      <p style="margin-top:2rem"><a class="btn btn-outline" href={href(lang, '/updates')}>{t.back}</a></p>
+    </div>
+  </article>
+</Base>

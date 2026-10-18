@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { ui, pillars, href, type Lang } from '../i18n';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+---
+<Base lang={lang} title={t.volunteer}>
+  <div class="page-head"><div class="container"><h1>{t.volunteer}</h1><p>{t.formIntro}</p></div></div>
+  <section class="section">
+    <div class="container">
+      <form class="form" name="volunteer" method="POST" action={href(lang, '/thanks')} data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="volunteer" />
+        <input type="hidden" name="language" value={lang} />
+        <p hidden><label>Do not fill this in: <input name="bot-field" /></label></p>
+
+        <div class="field"><label for="name">{t.name} *</label><input id="name" name="name" type="text" required autocomplete="name" /></div>
+        <div class="field"><label for="phone">{t.phone} *</label><input id="phone" name="phone" type="tel" required autocomplete="tel" inputmode="tel" /></div>
+        <div class="field"><label for="email">{t.email}</label><input id="email" name="email" type="email" autocomplete="email" /></div>
+        <div class="field">
+          <label for="area">{t.area}</label>
+          <select id="area" name="area">
+            <option value="">{t.anyArea}</option>
+            {pillars.map((p) => <option value={p.key}>{p[lang]}</option>)}
+          </select>
+        </div>
+        <fieldset>
+          <legend style="font-weight:600;margin-bottom:.4rem">{t.interests}</legend>
+          <div class="checks">
+            {pillars.map((p) => <label class="check"><input type="checkbox" name="interests" value={p.key} /> <span>{p.icon} {p[lang]}</span></label>)}
+          </div>
+        </fieldset>
+        <div class="field"><label for="availability">{t.availability}</label><input id="availability" name="availability" type="text" placeholder={t.availabilityHint} /></div>
+        <div class="field"><label for="message">{t.message}</label><textarea id="message" name="message" rows="4"></textarea></div>
+
+        <label class="check" style="margin-bottom:.6rem"><input type="checkbox" name="consent" value="yes" required /> <span>{t.consent} *</span></label>
+        <p class="muted small">{t.privacyNote} <a href={href(lang, '/privacy')}>{t.privacy}</a>.</p>
+        <button class="btn btn-primary" type="submit">{t.submitVol}</button>
+      </form>
+    </div>
+  </section>
+</Base>

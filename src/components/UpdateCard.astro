@@ -1,0 +1,15 @@
+---
+import { href, pick, pillarName, formatDate, type Lang } from '../i18n';
+const { lang, entry } = Astro.props as { lang: Lang; entry: any };
+const d = entry.data;
+const link = href(lang, `/updates/${entry.id}`);
+---
+<article class="card" data-pillar={d.pillar}>
+  <a class="card-img" href={link} tabindex="-1" aria-hidden="true"><img src={d.cover || '/uploads/placeholder.svg'} alt="" loading="lazy" /></a>
+  <div class="card-body">
+    <span class="tag">{pillarName(lang, d.pillar)}</span>
+    <h3 style="margin-top:.5rem"><a href={link}>{pick(lang, d.title, d.title_te)}</a></h3>
+    <p class="muted small">{formatDate(lang, d.date)}{d.location ? ` · ${d.location}` : ''}</p>
+    <p>{pick(lang, d.summary, d.summary_te)}</p>
+  </div>
+</article>

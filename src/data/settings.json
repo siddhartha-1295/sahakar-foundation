@@ -1,0 +1,36 @@
+{
+  "name": "Sahakar Foundation",
+  "name_te": "సహకార్ ఫౌండేషన్",
+  "tagline": "Hyderabad · Serving communities",
+  "tagline_te": "హైదరాబాద్ · సమాజ సేవలో",
+  "hero_title": "Opportunity for all. Dignity for everyone.",
+  "hero_title_te": "అందరికీ అవకాశం. ప్రతి ఒక్కరికీ గౌరవం.",
+  "hero_text": "Sahakar Foundation works to uplift backward communities through education, health, basic necessities, cleanliness, awareness and dharma.",
+  "hero_text_te": "సహకార్ ఫౌండేషన్ విద్య, ఆరోగ్యం, నిత్యావసరాలు, పరిశుభ్రత, అవగాహన మరియు ధర్మం ద్వారా వెనుకబడిన వర్గాల అభ్యున్నతికి కృషి చేస్తోంది.",
+  "mission": "To uplift backward communities by giving every family access to education, healthcare, basic necessities and a clean, dignified life. (Placeholder text)",
+  "mission_te": "ప్రతి కుటుంబానికి విద్య, ఆరోగ్య సేవలు, నిత్యావసరాలు, పరిశుభ్రమైన గౌరవప్రదమైన జీవితం అందేలా చేసి వెనుకబడిన వర్గాలను ముందుకు తీసుకెళ్లడం. (నమూనా వచనం)",
+  "vision": "A society where nobody is left behind because of where they were born. (Placeholder text)",
+  "vision_te": "పుట్టిన చోటు కారణంగా ఎవరూ వెనుకబడని సమాజం. (నమూనా వచనం)",
+  "story": "Sahakar Foundation began as a small group of neighbours in Hyderabad who wanted to help. Replace this with your real story in the admin panel. (Placeholder text)",
+  "story_te": "సహకార్ ఫౌండేషన్ హైదరాబాద్‌లో సహాయం చేయాలనుకున్న కొందరు పొరుగువారితో మొదలైంది. అడ్మిన్ ప్యానెల్‌లో దీన్ని మీ నిజమైన కథతో మార్చండి. (నమూనా వచనం)",
+  "phone": "+91 99999 99999",
+  "whatsapp": "919999999999",
+  "whatsapp_group": "",
+  "email": "info@example.org",
+  "address": "Hyderabad, Telangana, India",
+  "address_te": "హైదరాబాద్, తెలంగాణ, భారతదేశం",
+  "site_url": "https://YOUR-SITE.netlify.app",
+  "social": { "facebook": "", "instagram": "", "youtube": "", "x": "" },
+  "impact": [
+    { "value": "1,200+", "label": "Families helped", "label_te": "సహాయం పొందిన కుటుంబాలు" },
+    { "value": "350", "label": "Children supported", "label_te": "సహాయం పొందిన పిల్లలు" },
+    { "value": "40", "label": "Health camps", "label_te": "ఆరోగ్య శిబిరాలు" },
+    { "value": "120", "label": "Volunteers", "label_te": "స్వచ్ఛంద సేవకులు" }
+  ],
+  "team": [
+    { "name": "[Sample] Founder Name", "name_te": "[నమూనా] వ్యవస్థాపకుల పేరు", "role": "Founder", "role_te": "వ్యవస్థాపకులు", "photo": "" },
+    { "name": "[Sample] Secretary Name", "name_te": "[నమూనా] కార్యదర్శి పేరు", "role": "Secretary", "role_te": "కార్యదర్శి", "photo": "" },
+    { "name": "[Sample] Treasurer Name", "name_te": "[నమూనా] కోశాధికారి పేరు", "role": "Treasurer", "role_te": "కోశాధికారి", "photo": "" }
+  ],
+  "analytics_token": ""
+}

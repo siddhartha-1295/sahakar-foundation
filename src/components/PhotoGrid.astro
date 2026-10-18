@@ -1,0 +1,8 @@
+---
+const { photos = [], group = 'g', alt = '' } = Astro.props as { photos?: any[]; group?: string; alt?: string };
+---
+<div class="photo-grid">
+  {photos.map((p) => (
+    <a href={p.src ?? p} data-lightbox={group} data-caption={p.caption ?? ''}><img src={p.src ?? p} alt={p.caption ?? alt} loading="lazy" /></a>
+  ))}
+</div>

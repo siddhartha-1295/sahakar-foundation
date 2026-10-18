@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import PhotoGrid from '../components/PhotoGrid.astro';
+import { ui, href, pick, formatDate, type Lang } from '../i18n';
+const { lang, entry } = Astro.props as { lang: Lang; entry: any };
+const t = ui[lang];
+const d = entry.data;
+const title = pick(lang, d.title, d.title_te);
+const desc = pick(lang, d.description ?? '', d.description_te);
+---
+<Base lang={lang} title={title} description={desc || undefined} image={d.cover || d.photos[0]}>
+  <section class="section">
+    <div class="container">
+      <p><a href={href(lang, '/gallery')}>{t.back}</a></p>
+      <h1>{title}</h1>
+      <p class="muted">{formatDate(lang, d.date)} · {d.photos.length} {t.photoCount}</p>
+      {desc && <p class="lead">{desc}</p>}
+      <PhotoGrid photos={d.photos} group={'a-' + entry.id} alt={title} />
+    </div>
+  </section>
+</Base>

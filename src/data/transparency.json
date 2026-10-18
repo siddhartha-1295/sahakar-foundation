@@ -1,0 +1,23 @@
+{
+  "registration": [
+    { "label": "Registered as", "label_te": "నమోదు రకం", "value": "Trust / Society (placeholder)" },
+    { "label": "Registration number", "label_te": "నమోదు సంఖ్య", "value": "XXXX/2024" },
+    { "label": "Year of registration", "label_te": "నమోదైన సంవత్సరం", "value": "2024" },
+    { "label": "12A / 80G", "label_te": "12A / 80G", "value": "To be updated" },
+    { "label": "Registered office", "label_te": "రిజిస్టర్డ్ కార్యాలయం", "value": "Hyderabad, Telangana" }
+  ],
+  "fund_use": [
+    { "label": "Education", "label_te": "విద్య", "percent": 30 },
+    { "label": "Basic Necessities", "label_te": "నిత్యావసరాలు", "percent": 25 },
+    { "label": "Health & Medicine", "label_te": "ఆరోగ్యం & వైద్యం", "percent": 20 },
+    { "label": "Cleanliness & Awareness", "label_te": "పరిశుభ్రత & అవగాహన", "percent": 10 },
+    { "label": "Dharma", "label_te": "ధర్మం", "percent": 5 },
+    { "label": "Administration", "label_te": "నిర్వహణ", "percent": 10 }
+  ],
+  "commitments": [
+    { "text": "We publish how funds are used every year.", "text_te": "నిధులను ఎలా వినియోగిస్తున్నామో ప్రతి సంవత్సరం ప్రచురిస్తాం." },
+    { "text": "We never sell or share donor details.", "text_te": "దాతల వివరాలను ఎప్పుడూ అమ్మము, పంచుకోము." },
+    { "text": "Every donor can ask for a receipt.", "text_te": "ప్రతి దాత రసీదు కోరవచ్చు." }
+  ],
+  "certificates": []
+}

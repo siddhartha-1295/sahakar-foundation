@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import UpdateCard from '../components/UpdateCard.astro';
+import { ui, pillars, href, type Lang } from '../i18n';
+import { getUpdates } from '../lib/content';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const all = await getUpdates();
+---
+<Base lang={lang} title={t.nav.work}>
+  <div class="page-head"><div class="container"><h1>{t.nav.work}</h1><p>{t.workIntro}</p></div></div>
+  {pillars.map((p, i) => {
+    const items = all.filter((u) => u.data.pillar === p.key).slice(0, 3);
+    return (
+      <section class={'section' + (i % 2 ? ' alt' : '')} id={p.key}>
+        <div class="container">
+          <h2>{p.icon} {p[lang]}</h2>
+          <p class="lead">{lang === 'te' ? p.desc_te : p.desc_en}</p>
+          {items.length > 0 && <div class="grid g3">{items.map((e) => <UpdateCard lang={lang} entry={e} />)}</div>}
+          <p><a class="btn btn-outline" href={href(lang, `/updates?pillar=${p.key}`)}>{t.viewAll}</a></p>
+        </div>
+      </section>
+    );
+  })}
+</Base>

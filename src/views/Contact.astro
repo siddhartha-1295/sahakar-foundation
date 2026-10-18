@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+import { ui, pick, type Lang } from '../i18n';
+import settings from '../data/settings.json';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const address = pick(lang, settings.address, settings.address_te);
+const mapQ = encodeURIComponent(settings.address);
+const wa = `https://wa.me/${settings.whatsapp}?text=${encodeURIComponent('Hello ' + settings.name)}`;
+const social = Object.entries(settings.social).filter(([, v]) => v) as [string, string][];
+---
+<Base lang={lang} title={t.nav.contact}>
+  <div class="page-head"><div class="container"><h1>{t.nav.contact}</h1><p>{t.contactIntro}</p></div></div>
+  <section class="section">
+    <div class="container grid g2">
+      <div class="card pad">
+        <dl class="dl">
+          <div><dt>{t.address}</dt><dd>{address}</dd></div>
+          <div><dt>{t.phone}</dt><dd><a href={`tel:${settings.phone.replace(/\s/g, '')}`}>{settings.phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${settings.email}`}>{settings.email}</a></dd></div>
+          {social.length > 0 && <div><dt>{t.followUs}</dt><dd>{social.map(([k, v]) => <a href={v} target="_blank" rel="noopener" style="margin-right:.8rem">{k.charAt(0).toUpperCase() + k.slice(1)}</a>)}</dd></div>}
+        </dl>
+        <div class="actions">
+          <a class="btn btn-wa" href={wa} target="_blank" rel="noopener">{t.openWa}</a>
+          <a class="btn btn-outline" href={`https://www.google.com/maps/search/?api=1&query=${mapQ}`} target="_blank" rel="noopener">{t.openMap}</a>
+        </div>
+      </div>
+      <iframe class="map" title="Map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src={`https://www.google.com/maps?q=${mapQ}&output=embed`}></iframe>
+    </div>
+  </section>
+</Base>

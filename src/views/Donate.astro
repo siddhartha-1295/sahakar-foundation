@@ -1,0 +1,90 @@
+---
+import QRCode from 'qrcode';
+import Base from '../layouts/Base.astro';
+import { ui, href, pick, type Lang } from '../i18n';
+import donate from '../data/donate.json';
+import settings from '../data/settings.json';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+const hasUpi = donate.upi_id.trim() !== '';
+const payee = hasUpi ? donate.upi_id.trim() : 'sample@upi';
+const q = `pa=${encodeURIComponent(payee)}&pn=${encodeURIComponent(donate.upi_name)}&cu=INR`;
+const qr = await QRCode.toString(`upi://pay?${q}`, { type: 'svg', margin: 1, color: { dark: '#7a1f2b', light: '#ffffff' } });
+const apps = [
+  ['UPI', `upi://pay?${q}`], ['Google Pay', `tez://upi/pay?${q}`], ['PhonePe', `phonepe://pay?${q}`], ['Paytm', `paytmmp://pay?${q}`],
+];
+const bank = donate.bank;
+---
+<Base lang={lang} title={t.donate}>
+  <div class="page-head"><div class="container"><h1>❤ {t.donate}</h1><p>{donate.intro || t.donateIntro}</p></div></div>
+
+  <section class="section">
+    <div class="container grid g2">
+      <div class="card pad center">
+        <h2>{t.suggested}</h2>
+        <div class="amounts" style="justify-content:center">
+          {donate.amounts.map((a) => <button type="button" class="amt" data-amt={a}>₹{a.toLocaleString('en-IN')}</button>)}
+        </div>
+        <div class="qr">
+          <Fragment set:html={qr} />
+          {!hasUpi && <span class="stamp">{t.sample}</span>}
+        </div>
+        <p class="muted small">{t.scan}</p>
+        {hasUpi && (
+          <div class="phone-only" id="upi-apps">
+            {apps.map(([n, u]) => <a class="btn btn-green btn-sm" data-upi href={u} data-base={u}>{n}</a>)}
+          </div>
+        )}
+        {donate.razorpay_button_id && (
+          <form style="margin-top:1.2rem"><script is:inline src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id={donate.razorpay_button_id} async></script></form>
+        )}
+      </div>
+
+      <div class="card pad">
+        <h2>{t.bank}</h2>
+        <dl class="dl">
+          <div><dt>{t.accName}</dt><dd>{bank.account_name}</dd></div>
+          <div><dt>{t.accNo}</dt><dd>{bank.account_number}</dd></div>
+          <div><dt>{t.ifsc}</dt><dd>{bank.ifsc}</dd></div>
+          <div><dt>{t.bankName}</dt><dd>{bank.bank}</dd></div>
+          <div><dt>{t.branch}</dt><dd>{bank.branch}</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <h2>{t.receiptT}</h2>
+      <p class="muted">{t.receiptP}</p>
+      <form class="form" name="donation-receipt" method="POST" action={href(lang, '/thanks-donation')} data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="donation-receipt" />
+        <input type="hidden" name="language" value={lang} />
+        <p hidden><label>Do not fill this in: <input name="bot-field" /></label></p>
+        <div class="field"><label for="d-name">{t.name} *</label><input id="d-name" name="name" type="text" required /></div>
+        <div class="field"><label for="d-email">{t.email.replace(' (optional)', '').replace(' (ఐచ్ఛికం)', '')} *</label><input id="d-email" name="email" type="email" required /></div>
+        <div class="field"><label for="d-phone">{t.phone}</label><input id="d-phone" name="phone" type="tel" /></div>
+        <div class="field"><label for="d-amount">{t.amount} *</label><input id="d-amount" name="amount" type="number" min="1" required /></div>
+        <div class="field"><label for="d-utr">{t.utr}</label><input id="d-utr" name="reference" type="text" /></div>
+        <div class="field"><label for="d-date">{t.paidOn}</label><input id="d-date" name="paid_on" type="date" /></div>
+        {donate.show_80g && (
+          <div class="field"><label for="d-pan">{t.pan}</label><input id="d-pan" name="pan" type="text" maxlength="10" pattern="[A-Za-z]{5}[0-9]{4}[A-Za-z]" autocomplete="off" style="text-transform:uppercase" /><span class="muted small">{t.panHint}</span></div>
+        )}
+        <p class="muted small">{t.privacyNote} <a href={href(lang, '/privacy')}>{t.privacy}</a>.</p>
+        <button class="btn btn-primary" type="submit">{t.submitRec}</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Picking an amount adds it to the UPI app buttons (the printed QR stays amount-free).
+    const amts = Array.from(document.querySelectorAll<HTMLElement>('.amt'));
+    const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('a[data-upi]'));
+    amts.forEach((b) => b.addEventListener('click', () => {
+      amts.forEach((x) => x.classList.toggle('active', x === b));
+      links.forEach((a) => { a.href = `${a.dataset.base}&am=${b.dataset.amt}`; });
+      const f = document.getElementById('d-amount') as HTMLInputElement | null;
+      if (f) f.value = b.dataset.amt || '';
+    }));
+  </script>
+</Base>

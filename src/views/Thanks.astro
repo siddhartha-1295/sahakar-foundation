@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import EventCard from '../components/EventCard.astro';
+import { ui, href, type Lang } from '../i18n';
+import { splitEvents } from '../lib/content';
+import settings from '../data/settings.json';
+const { lang, kind = 'volunteer' } = Astro.props as { lang: Lang; kind?: 'volunteer' | 'donation' };
+const t = ui[lang];
+const isVol = kind === 'volunteer';
+const next = isVol ? (await splitEvents()).upcoming.slice(0, 2) : [];
+---
+<Base lang={lang} title={isVol ? t.thanksVolT : t.thanksDonT}>
+  <section class="section">
+    <div class="container center" style="max-width:760px">
+      <div style="font-size:3rem">{isVol ? '🙏' : '❤️'}</div>
+      <h1>{isVol ? t.thanksVolT : t.thanksDonT}</h1>
+      <p class="lead" style="margin-inline:auto">{isVol ? t.thanksVolP : t.thanksDonP}</p>
+      {isVol ? (
+        <div class="card pad" style="text-align:left;margin:1.5rem 0">
+          <h3>{t.next}</h3>
+          <ol><li>{t.step1}</li><li>{t.step2}</li><li>{t.step3}</li></ol>
+        </div>
+        <div class="actions" style="justify-content:center">
+          {settings.whatsapp_group && <a class="btn btn-wa" href={settings.whatsapp_group} target="_blank" rel="noopener">{t.joinGroup}</a>}
+          <a class="btn btn-outline" href={href(lang, '/')}>{t.home}</a>
+        </div>
+      ) : (
+        <p><strong>{t.receiptSoon}</strong></p>
+        <div class="actions" style="justify-content:center">
+          <a class="btn btn-primary" href={href(lang, '/updates')}>{t.seeActivities}</a>
+          <a class="btn btn-outline" href={href(lang, '/')}>{t.home}</a>
+        </div>
+      )}
+    </div>
+  </section>
+  {next.length > 0 && (
+    <section class="section alt"><div class="container"><h2>{t.nextEvents}</h2><div class="grid g2">{next.map((e) => <EventCard lang={lang} entry={e} />)}</div></div></section>
+  )}
+</Base>

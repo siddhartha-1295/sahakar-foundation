@@ -1,0 +1,15 @@
+{
+  "intro": "",
+  "amounts": [500, 1000, 2500, 5000],
+  "upi_id": "",
+  "upi_name": "Sahakar Foundation",
+  "razorpay_button_id": "",
+  "show_80g": false,
+  "bank": {
+    "account_name": "Sahakar Foundation",
+    "account_number": "0000000000",
+    "ifsc": "XXXX0000000",
+    "bank": "Sample Bank",
+    "branch": "Hyderabad"
+  }
+}

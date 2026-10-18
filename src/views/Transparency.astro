@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { ui, pick, type Lang } from '../i18n';
+import data from '../data/transparency.json';
+const { lang } = Astro.props as { lang: Lang };
+const t = ui[lang];
+---
+<Base lang={lang} title={lang === 'te' ? 'పారదర్శకత' : 'Transparency'}>
+  <div class="page-head"><div class="container"><h1>{lang === 'te' ? 'పారదర్శకత' : 'Transparency'}</h1></div></div>
+  <section class="section">
+    <div class="container grid g2">
+      <div class="card pad">
+        <h2>{t.regDetails}</h2>
+        <dl class="dl">{data.registration.map((r) => <div><dt>{pick(lang, r.label, r.label_te)}</dt><dd>{r.value}</dd></div>)}</dl>
+      </div>
+      <div class="card pad">
+        <h2>{t.fundUse}</h2>
+        <div class="bars" role="list">
+          {data.fund_use.map((f) => (
+            <div class="bar-row" role="listitem">
+              <div class="lbl"><span>{pick(lang, f.label, f.label_te)}</span><span>{f.percent}%</span></div>
+              <div class="bar-track"><div class="bar-fill" style={`width:${f.percent}%`}></div></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="container">
+      <h2>{t.commitments}</h2>
+      <ul>{data.commitments.map((c) => <li>{pick(lang, c.text, c.text_te)}</li>)}</ul>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <h2>{t.certs}</h2>
+      {data.certificates.length ? (
+        <div class="grid g3">
+          {data.certificates.map((c: any) => (
+            <div class="card pad"><h3>📄 {pick(lang, c.title, c.title_te)}</h3><a class="btn btn-outline btn-sm" href={c.file} target="_blank" rel="noopener">{t.download}</a></div>
+          ))}
+        </div>
+      ) : <p class="muted">{t.soon}</p>}
+    </div>
+  </section>
+</Base>

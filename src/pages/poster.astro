@@ -1,0 +1,64 @@
+---
+// English-only printable poster + 8-per-page cards. Open /poster and press the Print button.
+import QRCode from 'qrcode';
+import settings from '../data/settings.json';
+const url = settings.site_url;
+const qr = await QRCode.toString(url, { type: 'svg', margin: 1, color: { dark: '#7a1f2b', light: '#ffffff' } });
+const cards = Array.from({ length: 8 });
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Poster & cards | {settings.name}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+      @page { size: A4; margin: 0; }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: #ddd; font-family: 'Noto Sans', sans-serif; color: #2b1d1d; }
+      .toolbar { position: sticky; top: 0; background: #fff; padding: .7rem 1rem; display: flex; gap: .8rem; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,.15); z-index: 5; }
+      .toolbar button { background: #d9661f; color: #fff; border: 0; border-radius: 999px; padding: .6rem 1.4rem; font: 600 1rem 'Noto Sans', sans-serif; cursor: pointer; }
+      .sheet { width: 210mm; height: 297mm; margin: 10mm auto; background: #fffaf2; overflow: hidden; page-break-after: always; break-after: page; position: relative; }
+      .poster { display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; padding: 18mm 16mm; background: linear-gradient(#7a1f2b 0 34%, #fffaf2 34% 100%); }
+      .poster h1 { font: 700 44pt/1.1 'Poppins', sans-serif; color: #fff; margin: 0; }
+      .poster .tag { color: #ffd2aa; font-size: 16pt; margin: 4mm 0 0; }
+      .poster .qrbox { background: #fff; border: 3mm solid #d9661f; border-radius: 8mm; padding: 6mm; width: 120mm; }
+      .poster .qrbox svg { width: 100%; height: auto; display: block; }
+      .poster h2 { font: 700 26pt 'Poppins', sans-serif; color: #7a1f2b; margin: 0 0 2mm; }
+      .poster p { font-size: 14pt; margin: 0; }
+      .poster .url { font: 600 16pt 'Poppins', sans-serif; color: #2f5d50; }
+      .poster .areas { color: #7a1f2b; font-weight: 600; font-size: 12pt; }
+      .cards { display: grid; grid-template-columns: 105mm 105mm; grid-template-rows: repeat(4, 74.25mm); }
+      .card { border: .2mm dashed #b9a98f; display: flex; align-items: center; gap: 4mm; padding: 6mm; background: #fffaf2; }
+      .card .q { width: 38mm; flex: none; background: #fff; padding: 1.5mm; border-radius: 3mm; } .card .q svg { width: 100%; height: auto; display: block; }
+      .card h3 { font: 700 13pt/1.2 'Poppins', sans-serif; color: #7a1f2b; margin: 0 0 2mm; } .card p { margin: 0 0 1.5mm; font-size: 9.5pt; } .card .u { color: #2f5d50; font-weight: 600; word-break: break-all; }
+      @media print { body { background: none; } .toolbar { display: none; } .sheet { margin: 0; } }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar"><button onclick="window.print()">🖨 Print</button><span>A4 · page 1 is the poster, page 2 has 8 cards. In the print dialog turn on "Background graphics".</span></div>
+    <section class="sheet poster">
+      <div>
+        <h1>{settings.name}</h1>
+        <p class="tag">{settings.tagline}</p>
+      </div>
+      <div class="qrbox"><Fragment set:html={qr} /></div>
+      <div>
+        <h2>Scan to join, volunteer or donate</h2>
+        <p class="areas">Education · Basic Necessities · Cleanliness · Health &amp; Medicine · Social Awareness · Dharma</p>
+        <p class="url" style="margin-top:4mm">{url.replace(/^https?:\/\//, '')}</p>
+        <p style="margin-top:2mm">{settings.phone} · {settings.email}</p>
+      </div>
+    </section>
+    <section class="sheet cards">
+      {cards.map(() => (
+        <div class="card">
+          <div class="q"><Fragment set:html={qr} /></div>
+          <div><h3>{settings.name}</h3><p>Scan to volunteer, donate or see our work.</p><p class="u">{url.replace(/^https?:\/\//, '')}</p><p>{settings.phone}</p></div>
+        </div>
+      ))}
+    </section>
+  </body>
+</html>

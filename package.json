@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "astro": "^7.4.0",
+    "marked": "^18.1.1",
+    "qrcode": "^1.5.4"
+  },
+  "name": "sahakar-foundation",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  }
+}
